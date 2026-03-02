@@ -35,6 +35,8 @@ std::fs::write("figure.svg", svg).unwrap();
 
 `with_plots` takes a `Vec<Vec<Plot>>` — one inner `Vec` per panel, in row-major order (left to right, top to bottom). `with_layouts` takes a `Vec<Layout>` in the same order. Layouts are optional; omit `with_layouts` and each panel auto-computes its own range from its data.
 
+<img src="../assets/figure/basic.svg" alt="Basic 1×2 figure with panel labels" width="760">
+
 ---
 
 ## Merged cells
@@ -76,6 +78,12 @@ Figure::new(2, 2)
 
 Groups must be filled rectangles — L-shapes and other non-rectangular spans are not supported.
 
+<img src="../assets/figure/merged.svg" alt="2×3 figure with merged bottom panel" width="760">
+
+For a tall left panel:
+
+<img src="../assets/figure/tall_panel.svg" alt="2×2 figure with tall left panel" width="640">
+
 ---
 
 ## Shared axes
@@ -91,6 +99,8 @@ Figure::new(2, 2)
     .with_shared_x_all()       // same X range across all panels
     ;
 ```
+
+<img src="../assets/figure/shared_axes.svg" alt="2×2 figure with shared Y axes per row" width="640">
 
 Fine-grained control:
 
@@ -132,6 +142,8 @@ Figure::new(1, 2)
     .with_shared_legend_bottom()  // legend below the grid
     ;
 ```
+
+<img src="../assets/figure/shared_legend.svg" alt="1×2 figure with shared legend" width="760">
 
 To keep per-panel legends visible alongside the shared one:
 

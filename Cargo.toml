@@ -52,6 +52,9 @@ path = "src/bin/kuva/main.rs"
 required-features = ["cli"]
 
 [[example]]
+name = "figure"
+
+[[example]]
 name = "all_plots_simple"
 
 [[example]]

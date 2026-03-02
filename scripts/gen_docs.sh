@@ -8,6 +8,7 @@ set -euo pipefail
 EXAMPLES=(
     band
     bar
+    figure
     boxplot
     brick
     candlestick
