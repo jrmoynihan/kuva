@@ -4,12 +4,6 @@ use kuva::render::plots::Plot;
 use kuva::render::render::render_twin_y;
 use kuva::backend::svg::SvgBackend;
 use kuva::Palette;
-use std::fs;
-
-fn save_svg(name: &str, svg: &str) {
-    fs::create_dir_all("test_outputs").unwrap();
-    fs::write(format!("test_outputs/{}.svg", name), svg).unwrap();
-}
 
 fn make_temperature_line() -> Plot {
     let points: Vec<(f64, f64)> = vec![
@@ -33,7 +27,7 @@ fn test_twin_y_basic() {
     let layout = Layout::auto_from_twin_y_plots(&primary, &secondary);
     let scene = render_twin_y(primary, secondary, layout);
     let svg = SvgBackend.render_scene(&scene);
-    save_svg("twin_y_basic", &svg);
+    std::fs::write("test_outputs/twin_y_basic.svg", svg.clone()).unwrap();
 
     assert!(svg.contains("<svg"), "SVG should start with <svg element");
     // Right-side axis line should exist (add_y2_axis draws a vertical line at the right edge)
@@ -51,7 +45,7 @@ fn test_twin_y_labels() {
 
     let scene = render_twin_y(primary, secondary, layout);
     let svg = SvgBackend.render_scene(&scene);
-    save_svg("twin_y_labels", &svg);
+    std::fs::write("test_outputs/twin_y_labels.svg", svg.clone()).unwrap();
 
     assert!(svg.contains("Rain"), "SVG should contain the y2 label 'Rain'");
     assert!(svg.contains("Temp"), "SVG should contain the y label 'Temp'");
@@ -66,7 +60,7 @@ fn test_twin_y_auto() {
     let layout = Layout::auto_from_twin_y_plots(&primary, &secondary);
     let scene = render_twin_y(primary, secondary, layout);
     let svg = SvgBackend.render_scene(&scene);
-    save_svg("twin_y_auto", &svg);
+    std::fs::write("test_outputs/twin_y_auto.svg", svg.clone()).unwrap();
 
     assert!(svg.contains("<svg"), "SVG output should be valid");
 }
@@ -81,7 +75,7 @@ fn test_twin_y_palette() {
 
     let scene = render_twin_y(primary, secondary, layout);
     let svg = SvgBackend.render_scene(&scene);
-    save_svg("twin_y_palette", &svg);
+    std::fs::write("test_outputs/twin_y_palette.svg", svg.clone()).unwrap();
 
     // Wong palette first two colors: #E69F00, #56B4E9
     assert!(svg.contains("#E69F00"), "SVG should contain wong palette color 1");
@@ -105,7 +99,7 @@ fn test_twin_y_log_y2() {
 
     let scene = render_twin_y(primary, secondary, layout);
     let svg = SvgBackend.render_scene(&scene);
-    save_svg("twin_y_log_y2", &svg);
+    std::fs::write("test_outputs/twin_y_log_y2.svg", svg.clone()).unwrap();
 
     assert!(svg.contains("<svg"), "SVG should be valid");
     // Log ticks like 1, 100 should appear as text elements in the right-side axis labels

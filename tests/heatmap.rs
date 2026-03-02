@@ -7,8 +7,6 @@ use kuva::render::plots::Plot;
 
 #[test]
 fn test_heatmap_colorbar_values() {
-
-
     let data = vec![
         vec![10.0, 20.0, 30.0],
         vec![4.0, 50.0, 6.0],
@@ -22,7 +20,6 @@ fn test_heatmap_colorbar_values() {
                         .with_color_map(ColorMap::Viridis);
                         // .with_color_map(ColorMap::Inferno);
 
-    
     let plots = vec![Plot::Heatmap(heatmap)];
 
     let layout = Layout::auto_from_plots(&plots)

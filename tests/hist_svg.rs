@@ -5,8 +5,6 @@ use kuva::render::render::render_multiple;
 use kuva::render::layout::Layout;
 use kuva::render::plots::Plot;
 
-
-
 #[test]
 fn test_histogram_svg_output_builder() {
     let hist = Histogram::new()
@@ -76,6 +74,3 @@ fn test_non_normalized_histogram_y_axis_free() {
     assert!(!svg.contains(">1.1<") || svg.contains(">2<") || svg.contains(">3<"),
         "non-normalized histogram y-axis should show count ticks");
 }
-
-
-

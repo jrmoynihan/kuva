@@ -61,7 +61,6 @@ fn test_volcano_basic() {
 
     let scene = render_multiple(plots, layout);
     let svg = SvgBackend.render_scene(&scene);
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/volcano_basic.svg", svg.clone()).unwrap();
     assert!(svg.contains("<svg"));
     // Dashed threshold lines should be present
@@ -82,7 +81,6 @@ fn test_volcano_labeled_nudge() {
 
     let scene = render_multiple(plots, layout);
     let svg = SvgBackend.render_scene(&scene);
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/volcano_labeled_nudge.svg", svg.clone()).unwrap();
     assert!(svg.contains("<svg"));
     // At least one gene name should appear
@@ -104,7 +102,6 @@ fn test_volcano_labeled_exact() {
 
     let scene = render_multiple(plots, layout);
     let svg = SvgBackend.render_scene(&scene);
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/volcano_labeled_exact.svg", svg.clone()).unwrap();
     assert!(svg.contains("<svg"));
 }
@@ -124,7 +121,6 @@ fn test_volcano_labeled_arrow() {
 
     let scene = render_multiple(plots, layout);
     let svg = SvgBackend.render_scene(&scene);
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/volcano_labeled_arrow.svg", svg.clone()).unwrap();
     assert!(svg.contains("<svg"));
     // Leader lines drawn in gray
@@ -147,7 +143,6 @@ fn test_volcano_zero_pvalues() {
 
     let scene = render_multiple(plots, layout);
     let svg = SvgBackend.render_scene(&scene);
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/volcano_zero_pvalues.svg", svg.clone()).unwrap();
     assert!(svg.contains("<svg"));
 }
@@ -166,7 +161,6 @@ fn test_volcano_pvalue_floor() {
 
     let scene = render_multiple(plots, layout);
     let svg = SvgBackend.render_scene(&scene);
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/volcano_pvalue_floor.svg", svg.clone()).unwrap();
     assert!(svg.contains("<svg"));
 }
@@ -185,7 +179,6 @@ fn test_volcano_legend() {
 
     let scene = render_multiple(plots, layout);
     let svg = SvgBackend.render_scene(&scene);
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/volcano_legend.svg", svg.clone()).unwrap();
     assert!(svg.contains("<svg"));
     // Legend entries should appear
@@ -210,7 +203,6 @@ fn test_volcano_custom_colors() {
 
     let scene = render_multiple(plots, layout);
     let svg = SvgBackend.render_scene(&scene);
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/volcano_custom_colors.svg", svg.clone()).unwrap();
     assert!(svg.contains("<svg"));
     assert!(svg.contains("darkorange"));
@@ -233,7 +225,6 @@ fn test_volcano_custom_thresholds() {
 
     let scene = render_multiple(plots, layout);
     let svg = SvgBackend.render_scene(&scene);
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/volcano_custom_thresholds.svg", svg.clone()).unwrap();
     assert!(svg.contains("<svg"));
 }
@@ -253,7 +244,6 @@ fn test_volcano_render_volcano_fn() {
 
     let scene = render_volcano(&vp, &layout);
     let svg = SvgBackend.render_scene(&scene);
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/volcano_render_fn.svg", svg.clone()).unwrap();
     assert!(svg.contains("<svg"));
 }

@@ -15,7 +15,6 @@ fn test_line_svg_output_builder() {
     .with_color("blue")
     .with_legend("sine");
 
-
     let markers = ScatterPlot::new()
         .with_data(vec![(0.0, 0.0),
                         (1.57, 1.0),

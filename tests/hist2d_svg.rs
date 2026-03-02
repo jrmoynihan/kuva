@@ -9,7 +9,6 @@ use kuva::render::plots::Plot;
 use rand_distr::{Normal, Distribution};
 // use rand::prelude::*;
 
-
 #[test]
 fn test_histogram2d_svg_output_builder() {
 
@@ -42,17 +41,3 @@ fn test_histogram2d_svg_output_builder() {
     // Basic sanity assertion
     assert!(svg.contains("<svg"));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

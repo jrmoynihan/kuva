@@ -63,8 +63,7 @@ fn test_line_styles() {
     let layout = Layout::auto_from_plots(&plots)
         .with_title("Line Styles")
         .with_x_label("X")
-        .with_y_label("Y")
-;
+        .with_y_label("Y");
 
     let scene = render_multiple(plots, layout);
     let svg = SvgBackend.render_scene(&scene);

@@ -6,13 +6,8 @@ use kuva::render::layout::Layout;
 use kuva::render::plots::Plot;
 use kuva::{DateTimeAxis, ymd, ymd_hms};
 
-fn ensure_output_dir() {
-    std::fs::create_dir_all("test_outputs").unwrap();
-}
-
 #[test]
 fn test_datetime_days() {
-    ensure_output_dir();
     let t0 = ymd(2024, 1, 1);
     let t1 = ymd(2024, 1, 10);
     let data: Vec<(f64, f64)> = (0..10)
@@ -33,7 +28,6 @@ fn test_datetime_days() {
 
 #[test]
 fn test_datetime_months() {
-    ensure_output_dir();
     let t0 = ymd(2023, 1, 1);
     let t1 = ymd(2023, 12, 31);
     let data: Vec<(f64, f64)> = (0..12)
@@ -58,7 +52,6 @@ fn test_datetime_months() {
 
 #[test]
 fn test_datetime_years() {
-    ensure_output_dir();
     let t0 = ymd(2020, 1, 1);
     let t1 = ymd(2025, 1, 1);
     let data: Vec<(f64, f64)> = (0..5)
@@ -80,7 +73,6 @@ fn test_datetime_years() {
 
 #[test]
 fn test_datetime_auto() {
-    ensure_output_dir();
     // 180-day range → should auto-select Month unit
     let t0 = ymd(2024, 3, 1);
     let t1 = ymd(2024, 9, 1);
@@ -106,7 +98,6 @@ fn test_datetime_auto() {
 
 #[test]
 fn test_datetime_rotated() {
-    ensure_output_dir();
     let t0 = ymd(2024, 1, 1);
     let t1 = ymd(2024, 1, 15);
     let data: Vec<(f64, f64)> = (0..15)
@@ -148,7 +139,6 @@ fn test_datetime_helpers() {
 
 #[test]
 fn test_datetime_y_axis() {
-    ensure_output_dir();
     // y_datetime: timestamps on y-axis, plain x
     let t0 = ymd(2024, 1, 1);
     let t1 = ymd(2024, 6, 1);

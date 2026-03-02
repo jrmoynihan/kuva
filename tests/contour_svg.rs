@@ -1,14 +1,10 @@
+use std::fs;
+
 use kuva::plot::{ContourPlot, ColorMap};
 use kuva::backend::svg::SvgBackend;
 use kuva::render::render::render_multiple;
 use kuva::render::layout::Layout;
 use kuva::render::plots::Plot;
-
-use std::fs;
-
-fn ensure_output_dir() {
-    fs::create_dir_all("test_outputs").unwrap();
-}
 
 /// Simple 4x4 Gaussian-ish grid centred at (0,0)
 fn gaussian_grid() -> (Vec<Vec<f64>>, Vec<f64>, Vec<f64>) {
@@ -25,8 +21,6 @@ fn gaussian_grid() -> (Vec<Vec<f64>>, Vec<f64>, Vec<f64>) {
 
 #[test]
 fn contour_grid_basic() {
-    ensure_output_dir();
-
     let (z, xs, ys) = gaussian_grid();
     let cp = ContourPlot::new()
         .with_grid(z, xs, ys)
@@ -45,8 +39,6 @@ fn contour_grid_basic() {
 
 #[test]
 fn contour_filled() {
-    ensure_output_dir();
-
     let (z, xs, ys) = gaussian_grid();
     let cp = ContourPlot::new()
         .with_grid(z, xs, ys)
@@ -68,8 +60,6 @@ fn contour_filled() {
 
 #[test]
 fn contour_scatter() {
-    ensure_output_dir();
-
     // Build scattered (x, y, z) from a simple cone function
     let mut pts = Vec::new();
     for i in -5i32..=5 {
@@ -98,8 +88,6 @@ fn contour_scatter() {
 
 #[test]
 fn contour_explicit_levels() {
-    ensure_output_dir();
-
     let (z, xs, ys) = gaussian_grid();
     let cp = ContourPlot::new()
         .with_grid(z, xs, ys)
@@ -118,8 +106,6 @@ fn contour_explicit_levels() {
 
 #[test]
 fn contour_colormap_legend() {
-    ensure_output_dir();
-
     let (z, xs, ys) = gaussian_grid();
     let cp = ContourPlot::new()
         .with_grid(z, xs, ys)

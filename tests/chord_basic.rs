@@ -17,7 +17,6 @@ fn chord_basic() {
     let layout = Layout::auto_from_plots(&plots)
         .with_title("Chord Diagram");
     let svg = SvgBackend.render_scene(&render_multiple(plots, layout));
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/chord_basic.svg", svg).unwrap();
 }
 
@@ -40,6 +39,5 @@ fn chord_asymmetric() {
     let layout = Layout::auto_from_plots(&plots)
         .with_title("Asymmetric Chord Diagram");
     let svg = SvgBackend.render_scene(&render_multiple(plots, layout));
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/chord_asymmetric.svg", svg).unwrap();
 }

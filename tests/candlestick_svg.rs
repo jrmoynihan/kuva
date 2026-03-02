@@ -1,14 +1,8 @@
-use std::fs;
 use kuva::plot::CandlestickPlot;
 use kuva::render::plots::Plot;
 use kuva::render::layout::Layout;
 use kuva::render::render::render_multiple;
 use kuva::backend::svg::SvgBackend;
-
-fn write_svg(name: &str, svg: &str) {
-    fs::create_dir_all("test_outputs").unwrap();
-    fs::write(format!("test_outputs/{}.svg", name), svg).unwrap();
-}
 
 #[test]
 fn candlestick_basic() {
@@ -35,7 +29,7 @@ fn candlestick_basic() {
     let scene = render_multiple(vec![Plot::Candlestick(plot2)], layout);
     let svg = SvgBackend.render_scene(&scene);
 
-    write_svg("candlestick_basic", &svg);
+    std::fs::write("test_outputs/candlestick_basic.svg", &svg).unwrap();
 
     // Should have body rects (at least 5 bodies + 5 wicks as lines)
     assert!(svg.contains("<rect"), "Expected rect elements for candle bodies");
@@ -75,7 +69,7 @@ fn candlestick_volume() {
     let svg_vol = SvgBackend.render_scene(&scene_vol);
     let rect_count_vol = svg_vol.matches("<rect").count();
 
-    write_svg("candlestick_volume", &svg_vol);
+    std::fs::write("test_outputs/candlestick_volume.svg", svg_vol).unwrap();
 
     assert!(
         rect_count_vol > rect_count_plain,
@@ -105,7 +99,7 @@ fn candlestick_continuous() {
     let scene = render_multiple(vec![Plot::Candlestick(plot)], layout);
     let svg = SvgBackend.render_scene(&scene);
 
-    write_svg("candlestick_continuous", &svg);
+    std::fs::write("test_outputs/candlestick_continuous.svg", &svg).unwrap();
 
     assert!(svg.contains("<rect"), "Expected rect elements");
     assert!(svg.contains("<line"), "Expected line elements");
@@ -129,7 +123,7 @@ fn candlestick_legend() {
     let scene = render_multiple(vec![Plot::Candlestick(plot)], layout);
     let svg = SvgBackend.render_scene(&scene);
 
-    write_svg("candlestick_legend", &svg);
+    std::fs::write("test_outputs/candlestick_legend.svg", &svg).unwrap();
 
     assert!(svg.contains("AAPL"), "Legend label 'AAPL' should appear in SVG");
 }

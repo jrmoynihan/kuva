@@ -28,7 +28,6 @@ fn png_scatter_basic() {
     assert!(result.is_ok(), "render_scene failed: {:?}", result.err());
     let bytes = result.unwrap();
     assert_eq!(&bytes[..8], b"\x89PNG\r\n\x1a\n", "output is not a valid PNG");
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/png_scatter.png", &bytes).unwrap();
 }
 
@@ -193,6 +192,5 @@ fn png_rich_figure() {
     let bytes = PngBackend::new().render_scene(&scene).expect("PNG render failed");
 
     assert_eq!(&bytes[..8], b"\x89PNG\r\n\x1a\n", "output is not a valid PNG");
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/png_rich_figure.png", &bytes).unwrap();
 }

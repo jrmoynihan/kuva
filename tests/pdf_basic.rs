@@ -28,7 +28,6 @@ fn pdf_scatter_basic() {
     assert!(result.is_ok(), "render_scene failed: {:?}", result.err());
     let bytes = result.unwrap();
     assert_eq!(&bytes[..5], b"%PDF-", "output is not a valid PDF");
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/pdf_scatter.pdf", &bytes).unwrap();
 }
 
@@ -178,6 +177,5 @@ fn pdf_rich_figure() {
     let bytes = PdfBackend::new().render_scene(&scene).expect("PDF render failed");
 
     assert_eq!(&bytes[..5], b"%PDF-", "output is not a valid PDF");
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/pdf_rich_figure.pdf", &bytes).unwrap();
 }

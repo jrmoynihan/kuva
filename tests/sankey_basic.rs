@@ -20,7 +20,6 @@ fn sankey_basic() {
     let layout = Layout::auto_from_plots(&plots)
         .with_title("Sankey Basic");
     let svg = SvgBackend.render_scene(&render_multiple(plots, layout));
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/sankey_basic.svg", svg).unwrap();
 }
 
@@ -40,7 +39,6 @@ fn sankey_gradient() {
     let layout = Layout::auto_from_plots(&plots)
         .with_title("Sankey Gradient");
     let svg = SvgBackend.render_scene(&render_multiple(plots, layout));
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/sankey_gradient.svg", svg).unwrap();
 }
 
@@ -63,7 +61,6 @@ fn sankey_legend() {
     let layout = Layout::auto_from_plots(&plots)
         .with_title("Sankey Legend");
     let svg = SvgBackend.render_scene(&render_multiple(plots, layout));
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/sankey_legend.svg", svg).unwrap();
 }
 
@@ -86,7 +83,6 @@ fn sankey_dead_end() {
     let layout = Layout::auto_from_plots(&plots)
         .with_title("Sankey Dead Ends");
     let svg = SvgBackend.render_scene(&render_multiple(plots, layout));
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/sankey_dead_end.svg", svg).unwrap();
 }
 
@@ -121,7 +117,6 @@ fn sankey_variant_filter() {
     let layout = Layout::auto_from_plots(&plots)
         .with_title("Variant Filtering Pipeline");
     let svg = SvgBackend.render_scene(&render_multiple(plots, layout));
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/sankey_variant_filter.svg", svg).unwrap();
 }
 
@@ -144,6 +139,5 @@ fn sankey_per_link_color() {
     let layout = Layout::auto_from_plots(&plots)
         .with_title("Sankey Per-Link Color");
     let svg = SvgBackend.render_scene(&render_multiple(plots, layout));
-    std::fs::create_dir_all("test_outputs").unwrap();
     std::fs::write("test_outputs/sankey_per_link_color.svg", svg).unwrap();
 }

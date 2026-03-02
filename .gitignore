@@ -19,7 +19,6 @@ target/
 # Added by cargo
 
 /target
-/test_outputs
 /smoke_test_outputs
 /docs/book
 
