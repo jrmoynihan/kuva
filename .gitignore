@@ -26,4 +26,4 @@ target/
 # Internal / maintainer-only files
 CLAUDE.md
 TODO.md
-terminal.md
+/terminal.md
