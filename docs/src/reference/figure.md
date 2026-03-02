@@ -182,6 +182,15 @@ Figure::new(2, 3)
 
 The total SVG dimensions are computed automatically from the cell size, spacing, padding, title height, and any shared legend.
 
+Alternatively, set the **total** figure size and let cells auto-compute:
+
+```rust,no_run
+Figure::new(2, 3)
+    .with_figure_size(1200.0, 800.0)  // total width × height; cells sized to fit
+```
+
+`with_figure_size` takes precedence over `with_cell_size` when both are set.
+
 ---
 
 ## API reference
@@ -209,6 +218,7 @@ The total SVG dimensions are computed automatically from the cell size, spacing,
 | `.with_shared_legend_entries(vec)` | Override auto-collected legend entries |
 | `.with_keep_panel_legends()` | Keep per-panel legends alongside the shared one |
 | `.with_cell_size(w, h)` | Cell dimensions in pixels (default 500 × 380) |
+| `.with_figure_size(w, h)` | Total figure dimensions; cells auto-compute to fit |
 | `.with_spacing(px)` | Gap between cells (default 15) |
 | `.with_padding(px)` | Outer margin (default 10) |
 | `.render()` | Consume the Figure and return a `Scene` |

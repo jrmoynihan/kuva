@@ -381,6 +381,110 @@ fn figure_large_negative_values() {
     assert!(svg.contains(">-"));
 }
 
+// ── with_figure_size ────────────────────────────────────────────────────────
+
+/// Parse `width="NNN"` or `height="NNN"` from an SVG string.
+fn svg_dim(svg: &str, attr: &str) -> f64 {
+    let needle = format!(r#"{attr}=""#);
+    let start = svg.find(&needle).unwrap_or_else(|| panic!("no {attr} in SVG")) + needle.len();
+    let end = svg[start..].find('"').unwrap() + start;
+    svg[start..end].parse().unwrap()
+}
+
+#[test]
+fn figure_size_basic() {
+    // 2×2 grid, no title, no legend — total size should be exactly 800×600.
+    // With default padding=10, spacing=15:
+    //   cell_w = (800 - 2·10 - 1·15) / 2 = 382.5
+    //   cell_h = (600 - 2·10 - 1·15) / 2 = 282.5
+    let plots: Vec<Vec<Plot>> = vec![
+        scatter_plot("steelblue"),
+        scatter_plot("crimson"),
+        line_plot("seagreen"),
+        line_plot("darkorange"),
+    ];
+    let layouts = vec![
+        Layout::auto_from_plots(&plots[0]).with_title("A"),
+        Layout::auto_from_plots(&plots[1]).with_title("B"),
+        Layout::auto_from_plots(&plots[2]).with_title("C"),
+        Layout::auto_from_plots(&plots[3]).with_title("D"),
+    ];
+
+    let scene = Figure::new(2, 2)
+        .with_plots(plots)
+        .with_layouts(layouts)
+        .with_labels()
+        .with_figure_size(800.0, 600.0)
+        .render();
+
+    let svg = SvgBackend.render_scene(&scene);
+    std::fs::write("test_outputs/figure_size_basic.svg", &svg).unwrap();
+
+    assert_eq!(svg_dim(&svg, "width"),  800.0, "SVG width should match requested figure width");
+    assert_eq!(svg_dim(&svg, "height"), 600.0, "SVG height should match requested figure height");
+}
+
+#[test]
+fn figure_size_with_title() {
+    // 1×3 grid with a title — total size should still be exactly 900×400.
+    // Title height=30 is deducted from the cell height budget:
+    //   cell_w = (900 - 2·10 - 2·15) / 3 = 283.33…
+    //   cell_h = (400 - 2·10 - 0·15 - 30) / 1 = 350
+    let plots: Vec<Vec<Plot>> = vec![
+        scatter_plot("steelblue"),
+        scatter_plot("crimson"),
+        line_plot("seagreen"),
+    ];
+    let layouts = vec![
+        Layout::auto_from_plots(&plots[0]).with_title("Panel A"),
+        Layout::auto_from_plots(&plots[1]).with_title("Panel B"),
+        Layout::auto_from_plots(&plots[2]).with_title("Panel C"),
+    ];
+
+    let scene = Figure::new(1, 3)
+        .with_title("Figure with title — cells auto-fit")
+        .with_plots(plots)
+        .with_layouts(layouts)
+        .with_figure_size(900.0, 400.0)
+        .render();
+
+    let svg = SvgBackend.render_scene(&scene);
+    std::fs::write("test_outputs/figure_size_with_title.svg", &svg).unwrap();
+
+    assert_eq!(svg_dim(&svg, "width"),  900.0);
+    assert_eq!(svg_dim(&svg, "height"), 400.0);
+    assert!(svg.contains("Figure with title"));
+}
+
+#[test]
+fn figure_size_with_shared_legend() {
+    // 1×2 grid with a right-side shared legend — total size 760×380.
+    // Legend width (~87px) + legend_spacing(20) is deducted from cell width budget.
+    let plots: Vec<Vec<Plot>> = vec![
+        scatter_with_legend("steelblue", "Control"),
+        scatter_with_legend("crimson",   "Treatment"),
+    ];
+    let layouts = vec![
+        Layout::auto_from_plots(&plots[0]).with_title("Experiment 1").with_x_label("Time").with_y_label("Response"),
+        Layout::auto_from_plots(&plots[1]).with_title("Experiment 2").with_x_label("Time"),
+    ];
+
+    let scene = Figure::new(1, 2)
+        .with_plots(plots)
+        .with_layouts(layouts)
+        .with_shared_legend()
+        .with_figure_size(760.0, 380.0)
+        .render();
+
+    let svg = SvgBackend.render_scene(&scene);
+    std::fs::write("test_outputs/figure_size_with_legend.svg", &svg).unwrap();
+
+    assert_eq!(svg_dim(&svg, "width"),  760.0);
+    assert_eq!(svg_dim(&svg, "height"), 380.0);
+    assert!(svg.contains("Control"));
+    assert!(svg.contains("Treatment"));
+}
+
 fn scatter_with_legend(color: &str, label: &str) -> Vec<Plot> {
     vec![Plot::Scatter(
         ScatterPlot::new()

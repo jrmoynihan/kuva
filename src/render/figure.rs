@@ -80,6 +80,8 @@ pub struct Figure {
     padding: f64,
     cell_width: f64,
     cell_height: f64,
+    figure_width: Option<f64>,
+    figure_height: Option<f64>,
     shared_legend: Option<FigureLegendPosition>,
     shared_legend_entries: Option<Vec<LegendEntry>>,
     keep_panel_legends: bool,
@@ -103,6 +105,8 @@ impl Figure {
             padding: 10.0,
             cell_width: 500.0,
             cell_height: 380.0,
+            figure_width: None,
+            figure_height: None,
             shared_legend: None,
             shared_legend_entries: None,
             keep_panel_legends: false,
@@ -217,6 +221,14 @@ impl Figure {
         self
     }
 
+    /// Set the total figure size in pixels; cells auto-compute to fit.
+    /// Takes precedence over `with_cell_size` when both are set.
+    pub fn with_figure_size(mut self, w: f64, h: f64) -> Self {
+        self.figure_width = Some(w);
+        self.figure_height = Some(h);
+        self
+    }
+
     /// Add a shared legend to the right of the figure (auto-collected from plots).
     pub fn with_shared_legend(mut self) -> Self {
         self.shared_legend = Some(FigureLegendPosition::Right);
@@ -251,7 +263,8 @@ impl Figure {
         let Figure {
             rows, cols, structure, mut plots, layouts: user_layouts,
             title, title_size, labels, shared_x, shared_y,
-            spacing, padding, cell_width, cell_height,
+            spacing, padding, mut cell_width, mut cell_height,
+            figure_width, figure_height,
             shared_legend, shared_legend_entries, keep_panel_legends,
         } = self;
 
@@ -292,6 +305,33 @@ impl Figure {
         } else {
             (0.0, 0.0)
         };
+
+        // If total figure size is specified, back-compute cell dimensions to fit.
+        if let (Some(fw), Some(fh)) = (figure_width, figure_height) {
+            let legend_w_used = match shared_legend.as_ref() {
+                Some(FigureLegendPosition::Right)
+                    if legend_entries.as_ref().is_some_and(|e| !e.is_empty()) =>
+                {
+                    legend_width + legend_spacing
+                }
+                _ => 0.0,
+            };
+            let legend_h_used = match shared_legend.as_ref() {
+                Some(FigureLegendPosition::Bottom)
+                    if legend_entries.as_ref().is_some_and(|e| !e.is_empty()) =>
+                {
+                    legend_height + legend_spacing
+                }
+                _ => 0.0,
+            };
+            let title_h = if title.is_some() { 30.0 } else { 0.0 };
+            cell_width = ((fw - legend_w_used - 2.0 * padding - (cols as f64 - 1.0) * spacing)
+                / cols as f64)
+                .max(1.0);
+            cell_height = ((fh - legend_h_used - 2.0 * padding - (rows as f64 - 1.0) * spacing - title_h)
+                / rows as f64)
+                .max(1.0);
+        }
 
         let figure_title_height = if title.is_some() { 30.0 } else { 0.0 };
         let grid_width = cols as f64 * cell_width
