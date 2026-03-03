@@ -408,3 +408,34 @@ fn test_scatter_log_narrow_range() {
     // Narrow range should have 2x/5x sub-ticks (e.g. "20", "50")
     assert!(svg.contains(">20</text>") || svg.contains(">50</text>"));
 }
+
+/// Empty ScatterPlot should not panic and should produce valid SVG,
+/// whether used alone or mixed with a populated series.
+#[test]
+fn test_scatter_empty_data() {
+    let empty: Vec<(f64, f64)> = vec![];
+
+    // Alone: auto_from_plots skips empty plot (bounds returns None),
+    // render_multiple should still produce a valid SVG frame.
+    let plots = vec![Plot::Scatter(ScatterPlot::new().with_data(empty.clone()))];
+    let layout = Layout::auto_from_plots(&plots);
+    let svg = SvgBackend.render_scene(&render_multiple(plots, layout));
+    std::fs::write("test_outputs/scatter_empty.svg", &svg).unwrap();
+    assert!(svg.contains("<svg"), "empty scatter should still produce SVG");
+
+    // Mixed: one empty series + one with data — only the populated series
+    // should determine the axis range, and both should render without panic.
+    let populated = ScatterPlot::new()
+        .with_data(vec![(1.0_f64, 2.0), (3.0, 4.0)])
+        .with_color("steelblue")
+        .with_legend("data");
+    let plots2 = vec![
+        Plot::Scatter(ScatterPlot::new().with_data(empty)),
+        Plot::Scatter(populated),
+    ];
+    let layout2 = Layout::auto_from_plots(&plots2);
+    let svg2 = SvgBackend.render_scene(&render_multiple(plots2, layout2));
+    std::fs::write("test_outputs/scatter_empty_mixed.svg", &svg2).unwrap();
+    assert!(svg2.contains("<svg"), "mixed empty+populated should produce SVG");
+    assert!(svg2.contains("data"), "populated series legend should appear");
+}
