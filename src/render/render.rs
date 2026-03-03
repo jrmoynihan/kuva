@@ -2461,7 +2461,9 @@ pub fn collect_legend_entries(plots: &[Plot]) -> Vec<LegendEntry> {
             Plot::Brick(brickplot) => {
                 let labels = brickplot.template.as_ref().expect("BrickPlot legend requires a template colormap");
                 let motifs = brickplot.motifs.as_ref();
-                for (letter, color) in labels {
+                let mut sorted_labels: Vec<(&char, &String)> = labels.iter().collect();
+                sorted_labels.sort_by_key(|(letter, _)| *letter);
+                for (letter, color) in sorted_labels {
                     let label = if let Some(m) = motifs {
                         m.get(letter).cloned().unwrap_or(letter.to_string())
                     } else {
