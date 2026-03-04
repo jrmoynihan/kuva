@@ -20,13 +20,13 @@ pub struct BaseArgs {
     #[arg(long)]
     pub title: Option<String>,
 
-    /// Canvas width in pixels (default: 800).
-    #[arg(long, default_value_t = 800.0)]
-    pub width: f64,
+    /// Canvas width in pixels. Default is auto-computed from plot content.
+    #[arg(long)]
+    pub width: Option<f64>,
 
-    /// Canvas height in pixels (default: 500).
-    #[arg(long, default_value_t = 500.0)]
-    pub height: f64,
+    /// Canvas height in pixels. Default is auto-computed from plot content.
+    #[arg(long)]
+    pub height: Option<f64>,
 
     /// Visual theme: light (default), dark, solarized, minimal
     #[arg(long)]
@@ -139,7 +139,8 @@ pub struct LogArgs {
 
 /// Apply base output/appearance args to a layout.
 pub fn apply_base_args(mut layout: Layout, args: &BaseArgs) -> Layout {
-    layout = layout.with_width(args.width).with_height(args.height);
+    if let Some(w) = args.width { layout = layout.with_width(w); }
+    if let Some(h) = args.height { layout = layout.with_height(h); }
     if let Some(ref t) = args.title {
         layout = layout.with_title(t.clone());
     }
