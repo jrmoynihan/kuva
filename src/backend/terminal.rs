@@ -487,9 +487,9 @@ impl Canvas {
                 }
             }
 
-            Primitive::Path { d, stroke, fill, .. } => {
-                let has_stroke = stroke != "none";
-                let fill_str = fill.as_deref().unwrap_or("none");
+            Primitive::Path(pd) => {
+                let has_stroke = pd.stroke != "none";
+                let fill_str = pd.fill.as_deref().unwrap_or("none");
                 // SVG gradient references (url(#...)) can't be resolved in the
                 // terminal; treat them as a neutral grey.
                 let fill_rgb = if fill_str == "none" || fill_str.is_empty() {
@@ -513,7 +513,7 @@ impl Canvas {
                     let mut poly: Vec<(f64, f64)> = Vec::new();
                     let mut cur = (tx, ty);
                     let mut start = cur;
-                    for cmd in parse_path(d) {
+                    for cmd in parse_path(&pd.d) {
                         match cmd {
                             PathCmd::MoveTo(x, y) => {
                                 if poly.len() >= 3 {
@@ -556,13 +556,13 @@ impl Canvas {
 
                 // Stroked paths — draw outline with Bresenham as before.
                 let rgb = if has_stroke {
-                    css_to_rgb(stroke)
+                    css_to_rgb(&pd.stroke)
                 } else {
                     fill_rgb.unwrap()
                 };
                 let mut cur = (tx, ty);
                 let mut start = cur;
-                for cmd in parse_path(d) {
+                for cmd in parse_path(&pd.d) {
                     match cmd {
                         PathCmd::MoveTo(x, y) => {
                             cur = (x + tx, y + ty);

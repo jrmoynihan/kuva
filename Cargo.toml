@@ -24,6 +24,7 @@ full = ["png", "pdf"]
 [dependencies]
 colorous = "=1.0.16"
 chrono = { version = "0.4", default-features = false, features = ["std"] }
+ryu = "1"
 resvg       = { version = "0.44", optional = true }
 svg2pdf     = { version = "0.13", optional = true }
 clap        = { version = "4", features = ["derive"], optional = true }
@@ -33,6 +34,8 @@ clap_mangen = { version = "0.2", optional = true }
 rand = "0.9.1"
 rand_distr = "0.5.1"
 criterion = { version = "0.5", features = ["html_reports"] }
+plotters = "0.3"
+plotters-svg = "0.3"
 
 [[bench]]
 name = "render"
@@ -60,3 +63,7 @@ name = "all_plots_simple"
 [[example]]
 name = "all_plots_complex"
 required-features = ["png"]
+
+[[bench]]
+name = "vs_plotters"
+harness = false

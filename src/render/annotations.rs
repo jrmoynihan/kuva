@@ -1,4 +1,4 @@
-use crate::render::render::{Scene, Primitive, TextAnchor};
+use crate::render::render::{Scene, Primitive, PathData, TextAnchor};
 use crate::render::layout::ComputedLayout;
 
 pub enum Orientation {
@@ -286,14 +286,14 @@ pub fn add_text_annotations(annotations: &[TextAnnotation], scene: &mut Scene, c
                 let right_x = base_x + uy * arrow_half_w;
                 let right_y = base_y - ux * arrow_half_w;
 
-                scene.add(Primitive::Path {
+                scene.add(Primitive::Path(Box::new(PathData {
                     d: format!("M{tip_x},{tip_y} L{left_x},{left_y} L{right_x},{right_y} Z"),
                     fill: Some(ann.color.clone()),
                     stroke: ann.color.clone(),
                     stroke_width: 1.0,
                     opacity: None,
                     stroke_dasharray: None,
-                });
+                })));
             }
         }
 
