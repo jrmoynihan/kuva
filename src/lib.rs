@@ -29,22 +29,26 @@
 //!
 //! | Feature | Description |
 //! |---------|-------------|
-//! | `png`   | Enables [`PngBackend`] for rasterising SVG scenes via `resvg`. |
+//! | `raster`| Enables [`RasterBackend`], [`PngBackend`], and raster output via `resvg`/`fontdue`. |
+//! | `png`   | Alias for `raster` (backward compatibility). |
 //! | `pdf`   | Enables [`PdfBackend`] for vector PDF output via `svg2pdf`. |
 //! | `cli`   | Enables the `kuva` CLI binary (pulls in `clap`). |
-//! | `full`  | Enables `png` + `pdf`. |
+//! | `full`  | Enables `raster` + `pdf`. |
 
 pub mod plot;
 pub mod backend;
 pub mod render;
 pub mod prelude;
 
+#[cfg(feature = "polars")]
+pub mod dataframe;
+
 pub use backend::terminal::TerminalBackend;
 
-#[cfg(feature = "png")]
+#[cfg(feature = "raster")]
 pub use backend::png::PngBackend;
 
-#[cfg(feature = "png")]
+#[cfg(feature = "raster")]
 pub use backend::raster::RasterBackend;
 
 #[cfg(feature = "pdf")]
@@ -84,7 +88,7 @@ pub fn render_to_svg(plots: Vec<render::plots::Plot>, layout: render::layout::La
     backend::svg::SvgBackend.render_scene(&scene)
 }
 
-/// Render a collection of plots to a PNG byte vector in one call (requires feature `png`).
+/// Render a collection of plots to a PNG byte vector in one call (requires feature `raster`).
 ///
 /// `scale` is the pixel density multiplier: `1.0` matches the SVG logical size,
 /// `2.0` (the [`PngBackend`] default) gives retina/HiDPI quality.
@@ -93,7 +97,7 @@ pub fn render_to_svg(plots: Vec<render::plots::Plot>, layout: render::layout::La
 ///
 /// For fine-grained control use [`render::render::render_multiple`] and
 /// [`backend::png::PngBackend`] directly.
-#[cfg(feature = "png")]
+#[cfg(feature = "raster")]
 pub fn render_to_png(
     plots: Vec<render::plots::Plot>,
     layout: render::layout::Layout,
@@ -104,7 +108,7 @@ pub fn render_to_png(
 }
 
 /// Render a collection of plots directly to a PNG byte vector via `tiny_skia`,
-/// bypassing SVG serialization and re-parsing (requires feature `png`).
+/// bypassing SVG serialization and re-parsing (requires feature `raster`).
 ///
 /// This is significantly faster than [`render_to_png`] for data-heavy plots
 /// (scatter, manhattan, heatmap) because it skips the SVG round-trip.
@@ -112,7 +116,7 @@ pub fn render_to_png(
 /// correct font shaping.
 ///
 /// `scale` is the pixel density multiplier.
-#[cfg(feature = "png")]
+#[cfg(feature = "raster")]
 pub fn render_to_raster(
     plots: Vec<render::plots::Plot>,
     layout: render::layout::Layout,
@@ -120,6 +124,21 @@ pub fn render_to_raster(
 ) -> Result<Vec<u8>, String> {
     let scene = render::render::render_multiple(plots, layout);
     backend::raster::RasterBackend::new().with_scale(scale).render_scene(&scene)
+}
+
+/// Like [`render_to_raster`] but skips text rendering (axis labels, titles)
+/// for maximum throughput.  Useful when the frontend overlays its own labels.
+#[cfg(feature = "raster")]
+pub fn render_to_raster_no_text(
+    plots: Vec<render::plots::Plot>,
+    layout: render::layout::Layout,
+    scale: f32,
+) -> Result<Vec<u8>, String> {
+    let scene = render::render::render_multiple(plots, layout);
+    backend::raster::RasterBackend::new()
+        .with_scale(scale)
+        .with_skip_text(true)
+        .render_scene(&scene)
 }
 
 /// Render a collection of plots to a PDF byte vector in one call (requires feature `pdf`).
