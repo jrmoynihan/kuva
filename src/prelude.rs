@@ -111,6 +111,18 @@ pub use crate::render_to_svg;
 pub use crate::render_to_png;
 
 #[cfg(feature = "raster")]
+pub use crate::render_to_png_direct;
+
+#[cfg(feature = "raster")]
+pub use crate::render_to_png_direct_no_text;
+
+#[cfg(feature = "raster")]
+pub use crate::render_to_rgba;
+
+#[cfg(feature = "raster")]
+pub use crate::render_to_rgba_no_text;
+
+#[cfg(feature = "raster")]
 pub use crate::render_to_raster;
 
 #[cfg(feature = "raster")]
