@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `Color` type (`render::color`) — 3-variant enum (Rgb/None/Css) replacing `String` for fill/stroke in the render pipeline; `Color::Rgb(u8,u8,u8)` is 4 bytes inline with zero heap allocation; `From<&str>` parses hex, rgb(), "none", and 50+ named CSS colors
+- `CircleBatch` and `RectBatch` — SoA (struct-of-arrays) `Primitive` variants with contiguous coordinate arrays for scatter and heatmap; all backends support them
+- Parallel scene construction via `rayon` — coordinate transforms in CircleBatch and heatmap colormap computation run in parallel
+
+### Changed
+
+- `Primitive::Path` now uses `Box<PathData>` — shrinks enum from ~128 to ~88 bytes per element
+- SVG output uses hex colors for named CSS colors (e.g. `fill="red"` → `fill="#ff0000"`) — test assertions updated accordingly
+- `rayon` added as a dependency for parallel scene construction
+
 ---
 
 ## [0.1.3] — 2026-03-04
